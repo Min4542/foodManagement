@@ -410,7 +410,7 @@ public class TPJ_Food {
             //잘못 입력했을 시
             if (!corMenuName) {
                 if (!menuName.equals("0")) {
-                    System.out.println("\n다시 입력해주세요");
+                    System.out.println("\n재입력 부탁드립니다.");
                     continue;
                 }
             }//end if
