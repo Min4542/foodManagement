@@ -60,6 +60,7 @@ public class TPJ_Food {
 
     // 고객 조회 idx
     static int idx = 0;
+    static int idx2 = 0;
 
 
     //재사용 변수
@@ -80,7 +81,7 @@ public class TPJ_Food {
 
         while (true) {
             System.out.println(Arrays.toString(menu[idx]));
-            System.out.println("수정할 메뉴 이름을 입려해주세요.");
+            System.out.println("수정할 메뉴 이름을 입력해주세요.");
             System.out.print(">>>");
             String menuName = sc.next();
 
@@ -226,15 +227,15 @@ public class TPJ_Food {
     //로그인 메소드
     static void login() {
         // 비밀번호를 통과시키기 위한 번호
-        String ID ="";
+        String ID = "";
         while (true) {
             System.out.print("ID >> ");
-             ID = sc.next();
+            ID = sc.next();
             int passNum = 0;
             for (int i = 0; i < user.length; i++) {
                 if (user[0][i].equals(ID)) {
                     passNum = 1;
-                    idx=i;
+                    idx = i;
                     break;
                 } else passNum = 0;
             }
@@ -246,33 +247,33 @@ public class TPJ_Food {
         } // end while 1
         System.out.println("비밀번호를 입력하세요.");
 
-            while (true) {
-                // 비밀번호를 통과시키기 위한 번호
-                int passPW = 0;
-                System.out.print("PW >> ");
-                String PW = sc.next();
-                if (!PW.equals(user[1][idx])){
-                    System.out.println("비밀번호가 맞지않습니다.");
-                    continue;
-                }
-                for (int i = 0; i < user.length; i++) {
-                    if (user[1][i].equals(PW)) {
-                        passPW = 1;
-                        userInfor = i;
-                        idx = i;
-                        break;
-                    } else passPW = 0;
-                }
-
-                if (passPW == 1) {
-                    System.out.println();
-                    System.out.println("로그인에 성공하였습니다.");
-                    System.out.println(user[2][userInfor] + " 사장님 접속을 환영합니다.");
-                    break;
-                } else {
-                    System.out.println("비밀번호를 다시 입력해주세요.");
-                }
+        while (true) {
+            // 비밀번호를 통과시키기 위한 번호
+            int passPW = 0;
+            System.out.print("PW >> ");
+            String PW = sc.next();
+            if (!PW.equals(user[1][idx])) {
+                System.out.println("비밀번호가 맞지않습니다.");
+                continue;
             }
+            for (int i = 0; i < user.length; i++) {
+                if (user[1][i].equals(PW)) {
+                    passPW = 1;
+                    userInfor = i;
+                    idx = i;
+                    break;
+                } else passPW = 0;
+            }
+
+            if (passPW == 1) {
+                System.out.println();
+                System.out.println("로그인에 성공하였습니다.");
+                System.out.println(user[2][userInfor] + " 사장님 접속을 환영합니다.");
+                break;
+            } else {
+                System.out.println("비밀번호를 다시 입력해주세요.");
+            }
+        }
     }
 
 
@@ -320,7 +321,7 @@ public class TPJ_Food {
     private static void salesManagement(String setTime1) {
         while (true) {
             //해당 점포의 메뉴 띄우기
-            int total =0;
+            int total = 0;
             String selectUser = user[2][userInfor];
             for (int j = 0; j < user.length; j++) {
                 if (selectUser.equals(user[2][j])) {
@@ -343,15 +344,22 @@ public class TPJ_Food {
             //잘못입력했을 때 false로 반환되는 논리타입변수
             boolean corMenuName = false;
 
+            // 탈출문을 위한 변수
+            int breakNum = 0;
+
             for (int l = 0; l < menu.length; l++) {
                 if (menu[userInfor][l].equals(menuName)) {
                     sellMenuName = menuName;
                     System.out.println("판매하신 수량을 입력해주세요.");
                     System.out.print(">> ");
                     sellNum = sc.nextInt();
+                    System.out.println("");
                     sellMenuPrice = price[userInfor][l];
-
                     corMenuName = true;
+
+                    if (menuName.equals("0")) {
+                        corMenuName = true;
+                    }
 
                     //만약 등록한 메뉴를 다시 등록할 경우
                     boolean isAlreadySelled = false;
@@ -384,6 +392,19 @@ public class TPJ_Food {
                         temp2 = null;
                     }//end inner for
 
+                    System.out.println("===== ** 판매된 음식 목록 ** =====");
+                    System.out.printf("%s\n", setTime1);
+                    System.out.println("");
+                    //총수익
+                    for (int i = 0; i < sellNumList.length; i++) {
+                        idx2 = i;
+                        System.out.printf("%s %d인분 [%s원]\n", sellMenuList[i], sellNum, sellNumList[i]);
+                        total += sellNumList[i];
+                    }
+                    System.out.println("");
+                    System.out.printf("총 판매 금액: %d\n", total);
+                    System.out.println("");
+                    System.out.println("===== ** 판매된 음식 목록 ** =====");
                 }//end if
             }//end outer for
             //잘못 입력했을 시
@@ -393,30 +414,13 @@ public class TPJ_Food {
                     continue;
                 }
             }//end if
-
-            //총수익
-            total += sellMenuPrice * sellNum;
-
-            //0을 입력했을 시 총 수익과 함께 종료
-            if (menuName.equals("0")) {
-                corMenuName = true;
-                System.out.printf("%s\n", setTime1);
-                System.out.printf("현 시간 매출: %d\n", total);
-                break;
-            }
-            System.out.printf("%s %d인분 [%d원]\n", sellMenuName, sellNum, sellNumList[sellNumList.length - 1]);
-            System.out.printf("%s\n현 시간 매출: %d\n", setTime1, total);
-
-
         }//end while
-
-
     }//end method
 
     public static void main(String[] args) {
 
         //현재 시간
-        SimpleDateFormat timedata = new SimpleDateFormat("y.MM.dd a hh:mm:s");
+        SimpleDateFormat timedata = new SimpleDateFormat("y.MM.dd a hh:mm:ss");
         String setTime1 = timedata.format(date);
 
 
